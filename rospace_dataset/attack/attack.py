@@ -148,7 +148,8 @@ print(color(f"\nEstimated campaign duration: {timedelta(seconds=time_estimate)}"
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 log = open(args.log_file, 'w+')
 log.write('timestamp,attack,event\n')
-log.write(f"{dt.now().strftime('%a %b %d %H:%M:%S CEST 2026')},campaign,start\n")
+# log.write(f"{dt.now().strftime('%a %b %d %H:%M:%S CEST 2026')},campaign,start\n")
+log.write(f"{dt.now().timestamp()},campaign,start\n")
 msfclient = MsfRpcClient(args.msf_password, ssl=False)
 
 
@@ -166,24 +167,28 @@ def start_attack(atk_id):
     global attack_id
     attack_id = atk_id
     print(f"starting {attack_id}")
-    log.write(f"{dt.now().strftime('%a %b %d %H:%M:%S CEST 2026')},{attack_id},start\n")
+    # log.write(f"{dt.now().strftime('%a %b %d %H:%M:%S CEST 2026')},{attack_id},start\n")
+    log.write(f"{dt.now().timestamp()},campaign,start\n")
 
 
 def end_attack():
-    log.write(f"{dt.now().strftime('%a %b %d %H:%M:%S CEST 2026')},{attack_id},end\n")
+    # log.write(f"{dt.now().strftime('%a %b %d %H:%M:%S CEST 2026')},{attack_id},end\n")
+    log.write(f"{dt.now().timestamp()},campaign,end\n")
     print(f"{attack_id} ended")
 
 
 def end_campaign():
     send_wrapper('END')
-    #log.write(f"{dt.now().strftime('%a %b %d %H:%M:%S CEST 2026')},{attack_id},end\n")
-    log.write(f"{dt.now().strftime('%a %b %d %H:%M:%S CEST 2026')},campaign,end\n")
+    # log.write(f"{dt.now().strftime('%a %b %d %H:%M:%S CEST 2026')},{attack_id},end\n")
+    # log.write(f"{dt.now().strftime('%a %b %d %H:%M:%S CEST 2026')},campaign,end\n")
+    log.write(f"{dt.now().timestamp()},campaign,end\n")
     print(f"campaign ended")
 
 
 def ensure_madness_writes():
     send_wrapper('FLUSH')
-    log.write(f"{dt.now().strftime('%a %b %d %H:%M:%S CEST 2026')},restart madness and flush output signal,sent\n")
+    # log.write(f"{dt.now().strftime('%a %b %d %H:%M:%S CEST 2026')},restart madness and flush output signal,sent\n")
+    log.write(f"{dt.now().timestamp()},restart madness and flush output signal,sent\n")
     print(f"sent signal FLUSH to restart madness experiment and flush output")
 
 
@@ -229,7 +234,8 @@ def handle_network_errors(command):
             done = True
         except OSError as e:
             print(e)
-            log.write(f"{dt.now().strftime('%a %b %d %H:%M:%S CEST 2026')},network error,{str(e)}\n")
+            # log.write(f"{dt.now().strftime('%a %b %d %H:%M:%S CEST 2026')},network error,{str(e)}\n")
+            log.write(f"{dt.now().timestamp()},network error,{str(e)}\n")
             done = False
             retry -= 1
             sleep(args.timeout)
