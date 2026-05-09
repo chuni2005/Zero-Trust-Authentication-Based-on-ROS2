@@ -87,7 +87,21 @@ def load_and_preprocess(path, timestamp_col_name, time_unit='ms', columns=None, 
 		content.drop(columns=[timestamp_col_name], inplace=True)
 		
 		#content = content.assign(timestamp=pd.to_datetime(timestamp, unit=time_unit))
-		content = content.assign(timestamp=pd.to_datetime(timestamp, unit=time_unit), inplace=True)
+		# content = content.assign(timestamp=pd.to_datetime(timestamp, unit=time_unit), inplace=True)
+        # 轉換時間格式
+		# 1. 先統一解析成 datetime
+		temp_time = pd.to_datetime(timestamp, unit=time_unit)
+
+        # 2. 如果有時區資訊，先轉為標準 UTC 再移除時區
+		if temp_time.dt.tz is not None:
+			temp_time = temp_time.dt.tz_convert('UTC').dt.tz_localize(None)
+
+        # 3. 轉換為 Unix Timestamp (浮點數，單位：秒)
+        # 計算與 1970-01-01 的時間差，並除以 1 秒的長度，確保單位絕對一致
+		unix_time = (temp_time - pd.Timestamp('1970-01-01')) / pd.Timedelta('1s')
+
+		content = content.assign(timestamp=unix_time)
+		# something new end
 		del timestamp
 		gc.collect()
 		print(f'{path} converted')
@@ -155,14 +169,16 @@ with open('csv_manipulation.log', 'w+') as log_file:
 					merged = merged[(merged['timestamp'] >= stamp_limit)]
 					content = content[(content['timestamp'] >= stamp_limit)]
 					merged = pd.merge_asof(merged, content, on='timestamp', 
-						tolerance=timedelta(milliseconds=100), direction='nearest')
+						# tolerance=timedelta(milliseconds=100), direction='nearest')
+						tolerance=0.1, direction='nearest')
 					gc.collect()
 
 				system, s_min = system_f.result()
 				ros2, r_min = ros2_f.result()
 				attacks, a_min = attacks_f.result()
 				network = []
-				n_min = pd.to_datetime('2100-01-01')
+				# n_min = pd.to_datetime('2100-01-01')
+				n_min = float('inf')
 				for net_f in network_f:
 					net, stamp = net_f.result()
 					n_min = min(n_min, stamp)
@@ -171,8 +187,10 @@ with open('csv_manipulation.log', 'w+') as log_file:
 			system, s_min, s_max = load_and_preprocess(system_p, 'ms', 'ms')
 			print(system)
 			network = []
-			n_min = pd.to_datetime('2100-01-01')
-			n_max = pd.to_datetime('1900-01-01')
+			# n_min = pd.to_datetime('2100-01-01')
+			# n_max = pd.to_datetime('1900-01-01')
+			n_min = float('inf')
+			n_max = 0.0
 			attacks, a_min, a_max = load_and_preprocess(attacks_p, 'timestamp')
 			for net_p in network_p:
 				net, stamp_min, stamp_max = load_and_preprocess(net_p, 'layers.frame.frame.time_epoch')
@@ -249,13 +267,15 @@ with open('csv_manipulation.log', 'w+') as log_file:
 			print('done')
 		del network
 		print('First merge...', end='', flush=True)
-		merged = pd.merge_asof(merged, system, on='timestamp', tolerance=timedelta(milliseconds=100),
+		# merged = pd.merge_asof(merged, system, on='timestamp', tolerance=timedelta(milliseconds=100),
+		merged = pd.merge_asof(merged, system, on='timestamp', tolerance=0.1,
 			direction='nearest')
 		print('done')
 		del system
 		gc.collect()
 		print('Second merge...', end='', flush=True)
-		merged = pd.merge_asof(merged, ros2, on='timestamp', tolerance=timedelta(milliseconds=100),
+		# merged = pd.merge_asof(merged, ros2, on='timestamp', tolerance=timedelta(milliseconds=100),
+		merged = pd.merge_asof(merged, ros2, on='timestamp', tolerance=0.1,
 			direction='nearest')
 		print('done')
 		del ros2
@@ -309,7 +329,8 @@ with open('csv_manipulation.log', 'w+') as log_file:
 		del to_label
 		# merged = merged.assign(attack=lambda x: (x.index == to_label).astype(int))
 		# merged = merged.assign(attack=label_values)
-		merged = merged.assign(attack=label_values, inplace=True)
+		# merged = merged.assign(attack=label_values, inplace=True)
+		merged = merged.assign(attack=label_values)
 		gc.collect()
 		print(merged['attack'])
 

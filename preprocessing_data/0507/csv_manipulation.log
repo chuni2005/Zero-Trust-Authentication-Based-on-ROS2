@@ -1,0 +1,196 @@
+Sat May 09 01:37:34 2023  [Info]	Loading 'C:\Users\yuyux\OneDrive\Desktop\專題\Zero-Trust-Authentication-Based-on-ROS2\rospace_dataset\1_processing\OS_monitor_0507.csv'...
+Sat May 09 01:37:34 2023  [Info]	C:\Users\yuyux\OneDrive\Desktop\專題\Zero-Trust-Authentication-Based-on-ROS2\rospace_dataset\1_processing\OS_monitor_0507.csv loaded
+Sat May 09 01:37:34 2023  [Info]	Sorting C:\Users\yuyux\OneDrive\Desktop\專題\Zero-Trust-Authentication-Based-on-ROS2\rospace_dataset\1_processing\OS_monitor_0507.csv...
+Sat May 09 01:37:34 2023  [Info]	C:\Users\yuyux\OneDrive\Desktop\專題\Zero-Trust-Authentication-Based-on-ROS2\rospace_dataset\1_processing\OS_monitor_0507.csv sorted
+Sat May 09 01:37:34 2023  [Info]	Convert timestamp on C:\Users\yuyux\OneDrive\Desktop\專題\Zero-Trust-Authentication-Based-on-ROS2\rospace_dataset\1_processing\OS_monitor_0507.csv...
+Sat May 09 01:37:34 2023  [Info]	C:\Users\yuyux\OneDrive\Desktop\專題\Zero-Trust-Authentication-Based-on-ROS2\rospace_dataset\1_processing\OS_monitor_0507.csv converted
+Sat May 09 01:37:34 2023  [Info]	         MemFree   Buffers     Cached     Active   Inactive  ...  Tcp_TimeWait  Tcp_Close  nr_active_file  nr_inactive_file     timestamp
+0     2600570880  61464576  812838912  290889728  853540864  ...             0          0           70140            125287  1.778177e+09
+1     2624471040  61464576  812810240  291389440  829579264  ...             0          0           70261            125153  1.778177e+09
+2     2624212992  61464576  812810240  291389440  829882368  ...             0          0           70261            125153  1.778177e+09
+3     2624212992  61464576  812810240  291389440  826974208  ...             0          0           70261            125153  1.778177e+09
+4     2623967232  61464576  812810240  291508224  825221120  ...             0          0           70290            125124  1.778177e+09
+...          ...       ...        ...        ...        ...  ...           ...        ...             ...               ...           ...
+3749  2493628416  63307776  817577984  293629952  957878272  ...             0          0           70804            126004  1.778178e+09
+3750  2493370368  63307776  817577984  293629952  957882368  ...             0          0           70804            126005  1.778178e+09
+3751  2493370368  63307776  817577984  293629952  957882368  ...             0          0           70804            126005  1.778178e+09
+3752  2573463552  63324160  817569792  364027904  804544512  ...             0          0           87992            108817  1.778178e+09
+3753  2573463552  63324160  817569792  364036096  802783232  ...             0          0           87994            108817  1.778178e+09
+
+[3754 rows x 26 columns]
+Sat May 09 01:37:34 2023  [Info]	Loading 'C:\Users\yuyux\OneDrive\Desktop\專題\Zero-Trust-Authentication-Based-on-ROS2\rospace_dataset\attack_0507\attacks_log.csv'...
+Sat May 09 01:37:34 2023  [Info]	C:\Users\yuyux\OneDrive\Desktop\專題\Zero-Trust-Authentication-Based-on-ROS2\rospace_dataset\attack_0507\attacks_log.csv loaded
+Sat May 09 01:37:34 2023  [Info]	Sorting C:\Users\yuyux\OneDrive\Desktop\專題\Zero-Trust-Authentication-Based-on-ROS2\rospace_dataset\attack_0507\attacks_log.csv...
+Sat May 09 01:37:34 2023  [Info]	C:\Users\yuyux\OneDrive\Desktop\專題\Zero-Trust-Authentication-Based-on-ROS2\rospace_dataset\attack_0507\attacks_log.csv sorted
+Sat May 09 01:37:34 2023  [Info]	Convert timestamp on C:\Users\yuyux\OneDrive\Desktop\專題\Zero-Trust-Authentication-Based-on-ROS2\rospace_dataset\attack_0507\attacks_log.csv...
+Sat May 09 01:37:34 2023  [Info]	C:\Users\yuyux\OneDrive\Desktop\專題\Zero-Trust-Authentication-Based-on-ROS2\rospace_dataset\attack_0507\attacks_log.csv converted
+Sat May 09 01:37:34 2023  [Info]	Loading 'C:\Users\yuyux\OneDrive\Desktop\專題\Zero-Trust-Authentication-Based-on-ROS2\rospace_dataset\1_processing\converted\temp_capture_0507.csv'...
+Sat May 09 01:37:34 2023  [Info]	C:\Users\yuyux\OneDrive\Desktop\專題\Zero-Trust-Authentication-Based-on-ROS2\rospace_dataset\1_processing\converted\temp_capture_0507.csv loaded
+Sat May 09 01:37:34 2023  [Info]	Sorting C:\Users\yuyux\OneDrive\Desktop\專題\Zero-Trust-Authentication-Based-on-ROS2\rospace_dataset\1_processing\converted\temp_capture_0507.csv...
+Sat May 09 01:37:34 2023  [Info]	C:\Users\yuyux\OneDrive\Desktop\專題\Zero-Trust-Authentication-Based-on-ROS2\rospace_dataset\1_processing\converted\temp_capture_0507.csv sorted
+Sat May 09 01:37:34 2023  [Info]	Convert timestamp on C:\Users\yuyux\OneDrive\Desktop\專題\Zero-Trust-Authentication-Based-on-ROS2\rospace_dataset\1_processing\converted\temp_capture_0507.csv...
+Sat May 09 01:37:34 2023  [Info]	C:\Users\yuyux\OneDrive\Desktop\專題\Zero-Trust-Authentication-Based-on-ROS2\rospace_dataset\1_processing\converted\temp_capture_0507.csv converted
+Sat May 09 01:37:34 2023  [Info]	Loading 'C:\Users\yuyux\OneDrive\Desktop\專題\Zero-Trust-Authentication-Based-on-ROS2\rospace_dataset\1_processing\ros2_monitor_0507.csv'...
+Sat May 09 01:37:34 2023  [Info]	C:\Users\yuyux\OneDrive\Desktop\專題\Zero-Trust-Authentication-Based-on-ROS2\rospace_dataset\1_processing\ros2_monitor_0507.csv loaded
+Sat May 09 01:37:34 2023  [Info]	Sorting C:\Users\yuyux\OneDrive\Desktop\專題\Zero-Trust-Authentication-Based-on-ROS2\rospace_dataset\1_processing\ros2_monitor_0507.csv...
+Sat May 09 01:37:34 2023  [Info]	C:\Users\yuyux\OneDrive\Desktop\專題\Zero-Trust-Authentication-Based-on-ROS2\rospace_dataset\1_processing\ros2_monitor_0507.csv sorted
+Sat May 09 01:37:34 2023  [Info]	Convert timestamp on C:\Users\yuyux\OneDrive\Desktop\專題\Zero-Trust-Authentication-Based-on-ROS2\rospace_dataset\1_processing\ros2_monitor_0507.csv...
+Sat May 09 01:37:34 2023  [Info]	C:\Users\yuyux\OneDrive\Desktop\專題\Zero-Trust-Authentication-Based-on-ROS2\rospace_dataset\1_processing\ros2_monitor_0507.csv converted
+Sat May 09 01:37:34 2023  [Info]	         MemFree   Buffers     Cached     Active   Inactive  ...  Tcp_TimeWait  Tcp_Close  nr_active_file  nr_inactive_file     timestamp
+0     2600570880  61464576  812838912  290889728  853540864  ...             0          0           70140            125287  1.778177e+09
+1     2624471040  61464576  812810240  291389440  829579264  ...             0          0           70261            125153  1.778177e+09
+2     2624212992  61464576  812810240  291389440  829882368  ...             0          0           70261            125153  1.778177e+09
+3     2624212992  61464576  812810240  291389440  826974208  ...             0          0           70261            125153  1.778177e+09
+4     2623967232  61464576  812810240  291508224  825221120  ...             0          0           70290            125124  1.778177e+09
+...          ...       ...        ...        ...        ...  ...           ...        ...             ...               ...           ...
+3749  2493628416  63307776  817577984  293629952  957878272  ...             0          0           70804            126004  1.778178e+09
+3750  2493370368  63307776  817577984  293629952  957882368  ...             0          0           70804            126005  1.778178e+09
+3751  2493370368  63307776  817577984  293629952  957882368  ...             0          0           70804            126005  1.778178e+09
+3752  2573463552  63324160  817569792  364027904  804544512  ...             0          0           87992            108817  1.778178e+09
+3753  2573463552  63324160  817569792  364036096  802783232  ...             0          0           87994            108817  1.778178e+09
+
+[3754 rows x 26 columns]
+Sat May 09 01:37:35 2023  [Info]	                                     attack  event     timestamp
+0                                  campaign  start  1.778205e+09
+1                            nmap discovery  start  1.778205e+09
+2                            nmap discovery    end  1.778205e+09
+3                            nmap discovery  start  1.778205e+09
+4                            nmap discovery    end  1.778205e+09
+5   restart madness and flush output signal   sent  1.778205e+09
+6                        nmap port scanning  start  1.778205e+09
+8                        nmap port scanning  start  1.778206e+09
+7                        nmap port scanning    end  1.778206e+09
+9                        nmap port scanning    end  1.778206e+09
+10  restart madness and flush output signal   sent  1.778206e+09
+11                      ros2 reconnaissance  start  1.778206e+09
+12                      ros2 reconnaissance    end  1.778206e+09
+13                      ros2 reconnaissance  start  1.778206e+09
+14                      ros2 reconnaissance    end  1.778206e+09
+15  restart madness and flush output signal   sent  1.778206e+09
+16                           nmap SYN flood  start  1.778206e+09
+17                           nmap SYN flood    end  1.778206e+09
+18                           nmap SYN flood  start  1.778206e+09
+19                           nmap SYN flood    end  1.778206e+09
+20  restart madness and flush output signal   sent  1.778206e+09
+21                          ros2 reflection  start  1.778206e+09
+22                          ros2 reflection    end  1.778206e+09
+23                          ros2 reflection  start  1.778206e+09
+24                          ros2 reflection    end  1.778206e+09
+25  restart madness and flush output signal   sent  1.778206e+09
+26                       ros2 node crashing  start  1.778206e+09
+27                       ros2 node crashing    end  1.778206e+09
+28                       ros2 node crashing  start  1.778206e+09
+29                       ros2 node crashing    end  1.778206e+09
+30  restart madness and flush output signal   sent  1.778206e+09
+31                     metasploit SYN flood  start  1.778206e+09
+32                     metasploit SYN flood    end  1.778206e+09
+33                     metasploit SYN flood  start  1.778207e+09
+34                     metasploit SYN flood    end  1.778207e+09
+35  restart madness and flush output signal   sent  1.778207e+09
+36                                 campaign    end  1.778207e+09
+Sat May 09 01:37:35 2023  [Info]	              topic_name                                          src_topic  ...                        msg_data     timestamp
+0      /parameter_events                                  ros2_monitor_node  ...             Waiting for data...  1.778177e+09
+1                /rosout                                  ros2_monitor_node  ...             Waiting for data...  1.778177e+09
+2      /parameter_events                                  ros2_monitor_node  ...             Waiting for data...  1.778177e+09
+3                /rosout                                  ros2_monitor_node  ...             Waiting for data...  1.778177e+09
+4      /parameter_events                                  ros2_monitor_node  ...             Waiting for data...  1.778177e+09
+...                  ...                                                ...  ...                             ...           ...
+16685  /parameter_events  _NODE_NAME_UNKNOWN_|_NODE_NAME_UNKNOWN_|ros2_m...  ...  rcl_interfaces.msg.ParameterEv  1.778178e+09
+16686            /rosout  _NODE_NAME_UNKNOWN_|_NODE_NAME_UNKNOWN_|ros2_m...  ...  rcl_interfaces.msg.Log(stamp=b  1.778178e+09
+16687               /ouo                                _NODE_NAME_UNKNOWN_  ...  std_msgs.msg.String(data='Hell  1.778178e+09
+16688  /parameter_events  _NODE_NAME_UNKNOWN_|_NODE_NAME_UNKNOWN_|ros2_m...  ...  rcl_interfaces.msg.ParameterEv  1.778178e+09
+16689            /rosout  _NODE_NAME_UNKNOWN_|_NODE_NAME_UNKNOWN_|ros2_m...  ...  rcl_interfaces.msg.Log(stamp=b  1.778178e+09
+
+[16690 rows x 7 columns]
+Sat May 09 01:37:35 2023  [Info]	[      Unnamed: 0  layers.frame.frame.section_number  ...  layers.icmp.ntp.ntp.xmt     timestamp
+0              0                                  1  ...                      NaN  1.778177e+09
+1              1                                  1  ...                      NaN  1.778177e+09
+2              2                                  1  ...                      NaN  1.778177e+09
+3              3                                  1  ...                      NaN  1.778177e+09
+4              4                                  1  ...                      NaN  1.778177e+09
+...          ...                                ...  ...                      ...           ...
+3399        3399                                  1  ...                      NaN  1.778178e+09
+3400        3400                                  1  ...                      NaN  1.778178e+09
+3401        3401                                  1  ...                      NaN  1.778178e+09
+3402        3402                                  1  ...                      NaN  1.778178e+09
+3403        3403                                  1  ...                      NaN  1.778178e+09
+
+[3404 rows x 465 columns]]
+Sat May 09 01:37:35 2023  [Info]	
+Sat May 09 01:37:35 2023  [Info]	system: 1778176629.94
+Sat May 09 01:37:35 2023  [Info]	network: 1778176635.8143747
+Sat May 09 01:37:35 2023  [Info]	ros2: 1778176623.735
+Sat May 09 01:37:35 2023  [Info]	attacks: 1778205470.0
+Sat May 09 01:37:35 2023  [Info]	Chosen timestamp lower limit = 1778205470.0
+Sat May 09 01:37:35 2023  [Info]	Chosen timestamp upper limit = 1778177734.8107624
+Sat May 09 01:37:35 2023  [Info]	
+Sat May 09 01:37:35 2023  [Info]	                                     attack  event     timestamp
+0                                  campaign  start  1.778205e+09
+1                            nmap discovery  start  1.778205e+09
+2                            nmap discovery    end  1.778205e+09
+3                            nmap discovery  start  1.778205e+09
+4                            nmap discovery    end  1.778205e+09
+5   restart madness and flush output signal   sent  1.778205e+09
+6                        nmap port scanning  start  1.778205e+09
+8                        nmap port scanning  start  1.778206e+09
+7                        nmap port scanning    end  1.778206e+09
+9                        nmap port scanning    end  1.778206e+09
+10  restart madness and flush output signal   sent  1.778206e+09
+11                      ros2 reconnaissance  start  1.778206e+09
+12                      ros2 reconnaissance    end  1.778206e+09
+13                      ros2 reconnaissance  start  1.778206e+09
+14                      ros2 reconnaissance    end  1.778206e+09
+15  restart madness and flush output signal   sent  1.778206e+09
+16                           nmap SYN flood  start  1.778206e+09
+17                           nmap SYN flood    end  1.778206e+09
+18                           nmap SYN flood  start  1.778206e+09
+19                           nmap SYN flood    end  1.778206e+09
+20  restart madness and flush output signal   sent  1.778206e+09
+21                          ros2 reflection  start  1.778206e+09
+22                          ros2 reflection    end  1.778206e+09
+23                          ros2 reflection  start  1.778206e+09
+24                          ros2 reflection    end  1.778206e+09
+25  restart madness and flush output signal   sent  1.778206e+09
+26                       ros2 node crashing  start  1.778206e+09
+27                       ros2 node crashing    end  1.778206e+09
+28                       ros2 node crashing  start  1.778206e+09
+29                       ros2 node crashing    end  1.778206e+09
+30  restart madness and flush output signal   sent  1.778206e+09
+31                     metasploit SYN flood  start  1.778206e+09
+32                     metasploit SYN flood    end  1.778206e+09
+33                     metasploit SYN flood  start  1.778207e+09
+34                     metasploit SYN flood    end  1.778207e+09
+35  restart madness and flush output signal   sent  1.778207e+09
+36                                 campaign    end  1.778207e+09
+Sat May 09 01:37:35 2023  [Info]	Lenghts
+Sat May 09 01:37:35 2023  [Info]	system: 0
+Sat May 09 01:37:35 2023  [Info]	network: 0
+Sat May 09 01:37:35 2023  [Info]	ros2: 0
+Sat May 09 01:37:35 2023  [Info]	attacks: 0
+Sat May 09 01:37:35 2023  [Info]	
+Sat May 09 01:37:35 2023  [Info]	Preparing to merge
+Sat May 09 01:37:35 2023  [Info]	First merge...
+Sat May 09 01:37:35 2023  [Info]	done
+Sat May 09 01:37:35 2023  [Info]	Second merge...
+Sat May 09 01:37:35 2023  [Info]	done
+Sat May 09 01:37:35 2023  [Info]	Delete duplicate column "timestamp"...
+Sat May 09 01:37:35 2023  [Info]	done
+Sat May 09 01:37:35 2023  [Info]	Saving to C:\Users\yuyux\OneDrive\Desktop\專題\Zero-Trust-Authentication-Based-on-ROS2\rospace_dataset\1_processing\merged-dataset\merged-09_05_2026@01_37_35_unlabelled.csv...
+Sat May 09 01:37:35 2023  [Info]	done
+Sat May 09 01:37:35 2023  [Info]	Labeling attacks...
+Sat May 09 01:37:35 2023  [Info]	Series([], Name: attack, dtype: float64)
+Sat May 09 01:37:35 2023  [Info]	Removing observations outside boundaries...
+Sat May 09 01:37:35 2023  [Info]	(0, 495)
+Sat May 09 01:37:35 2023  [Info]	Empty DataFrame
+Columns: [timestamp, layers.frame.frame.interface_id, layers.frame.frame.interface_id_tree.frame.interface_name, layers.frame.frame.encap_type, layers.frame.frame.time, layers.frame.frame.time_utc, layers.frame.frame.offset_shift, layers.frame.frame.time_relative, layers.frame.frame.number, layers.frame.frame.len, layers.frame.frame.cap_len, layers.frame.frame.marked, layers.frame.frame.ignored, layers.frame.frame.protocols, layers.frame.frame.encoding, layers.eth.eth.dst, layers.eth.eth.dst_tree.eth.dst_resolved, layers.eth.eth.dst_tree.eth.dst.oui, layers.eth.eth.dst_tree.eth.dst.oui_resolved, layers.eth.eth.dst_tree.eth.dst.lg, layers.eth.eth.dst_tree.eth.dst.ig, layers.eth.eth.dst_tree.eth.addr, layers.eth.eth.dst_tree.eth.addr_resolved, layers.eth.eth.dst_tree.eth.addr.oui, layers.eth.eth.dst_tree.eth.addr.oui_resolved, layers.eth.eth.dst_tree.eth.lg, layers.eth.eth.dst_tree.eth.ig, layers.eth.eth.src, layers.eth.eth.src_tree.eth.src_resolved, layers.eth.eth.src_tree.eth.src.oui, layers.eth.eth.src_tree.eth.src.oui_resolved, layers.eth.eth.src_tree.eth.src.lg, layers.eth.eth.src_tree.eth.src.ig, layers.eth.eth.src_tree.eth.addr, layers.eth.eth.src_tree.eth.addr_resolved, layers.eth.eth.src_tree.eth.addr.oui, layers.eth.eth.src_tree.eth.addr.oui_resolved, layers.eth.eth.src_tree.eth.lg, layers.eth.eth.src_tree.eth.ig, layers.eth.eth.type, layers.eth.eth.stream, layers.ip.ip.version, layers.ip.ip.hdr_len, layers.ip.ip.dsfield, layers.ip.ip.dsfield_tree.ip.dsfield.dscp, layers.ip.ip.dsfield_tree.ip.dsfield.ecn, layers.ip.ip.len, layers.ip.ip.id, layers.ip.ip.flags, layers.ip.ip.flags_tree.ip.flags.rb, layers.ip.ip.flags_tree.ip.flags.df, layers.ip.ip.flags_tree.ip.flags.mf, layers.ip.ip.frag_offset, layers.ip.ip.ttl, layers.ip.ip.proto, layers.ip.ip.checksum, layers.ip.ip.checksum.status, layers.ip.ip.src, layers.ip.ip.addr, layers.ip.ip.src_host, layers.ip.ip.host, layers.ip.ip.dst, layers.ip.ip.dst_host, layers.ip.ip.stream, layers.udp.udp.srcport, layers.udp.udp.dstport, layers.udp.udp.port, layers.udp.udp.length, layers.udp.udp.checksum, layers.udp.udp.checksum.status, layers.udp.udp.stream, layers.udp.udp.stream.pnum, layers.udp.Timestamps.udp.time_relative, layers.udp.Timestamps.udp.time_delta, layers.udp.udp.payload, layers.rtps.rtps.magic, layers.rtps.rtps.version, layers.rtps.rtps.version_tree.rtps.version.major, layers.rtps.rtps.version_tree.rtps.version.minor, layers.rtps.rtps.vendorId, layers.rtps.rtps.guidPrefix.src, layers.rtps.rtps.guidPrefix.src_tree.rtps.hostId, layers.rtps.rtps.guidPrefix.src_tree.rtps.appId, layers.rtps.rtps.guidPrefix.src_tree.rtps.sm.guidPrefix.instanceId, layers.rtps.rtps.guidPrefix, layers.rtps.Default port mapping (Based on calculated domainId. Might not be accurate): domainId=0, participantIdx=0, nature=UNICAST_METATRAFFIC.rtps.domain_id, layers.rtps.Default port mapping (Based on calculated domainId. Might not be accurate): domainId=0, participantIdx=0, nature=UNICAST_METATRAFFIC.rtps.participant_idx, layers.rtps.Default port mapping (Based on calculated domainId. Might not be accurate): domainId=0, participantIdx=0, nature=UNICAST_METATRAFFIC.rtps.traffic_nature, layers.rtps.rtps.sm.id, layers.rtps.rtps.sm.id_tree.rtps.sm.flags, layers.rtps.rtps.sm.id_tree.rtps.sm.flags_tree.rtps.flag.reserved, layers.rtps.rtps.sm.id_tree.rtps.sm.flags_tree.rtps.flag.data.serialized_key, layers.rtps.rtps.sm.id_tree.rtps.sm.flags_tree.rtps.flag.data_present, layers.rtps.rtps.sm.id_tree.rtps.sm.flags_tree.rtps.flag.inline_qos, layers.rtps.rtps.sm.id_tree.rtps.sm.flags_tree.rtps.flag.endianness, layers.rtps.rtps.sm.id_tree.rtps.sm.octetsToNextHeader, layers.rtps.rtps.sm.id_tree.rtps.extra_flags, layers.rtps.rtps.sm.id_tree.rtps.octets_to_inline_qos, layers.rtps.rtps.sm.id_tree.rtps.sm.rdEntityId, layers.rtps.rtps.sm.id_tree.rtps.sm.rdEntityId_tree.rtps.sm.rdEntityId.entityKey, ...]
+Index: []
+
+[0 rows x 495 columns]
+Sat May 09 01:37:35 2023  [Info]	Empty DataFrame
+Columns: [timestamp, layers.frame.frame.interface_id, layers.frame.frame.interface_id_tree.frame.interface_name, layers.frame.frame.encap_type, layers.frame.frame.time, layers.frame.frame.time_utc, layers.frame.frame.offset_shift, layers.frame.frame.time_relative, layers.frame.frame.number, layers.frame.frame.len, layers.frame.frame.cap_len, layers.frame.frame.marked, layers.frame.frame.ignored, layers.frame.frame.protocols, layers.frame.frame.encoding, layers.eth.eth.dst, layers.eth.eth.dst_tree.eth.dst_resolved, layers.eth.eth.dst_tree.eth.dst.oui, layers.eth.eth.dst_tree.eth.dst.oui_resolved, layers.eth.eth.dst_tree.eth.dst.lg, layers.eth.eth.dst_tree.eth.dst.ig, layers.eth.eth.dst_tree.eth.addr, layers.eth.eth.dst_tree.eth.addr_resolved, layers.eth.eth.dst_tree.eth.addr.oui, layers.eth.eth.dst_tree.eth.addr.oui_resolved, layers.eth.eth.dst_tree.eth.lg, layers.eth.eth.dst_tree.eth.ig, layers.eth.eth.src, layers.eth.eth.src_tree.eth.src_resolved, layers.eth.eth.src_tree.eth.src.oui, layers.eth.eth.src_tree.eth.src.oui_resolved, layers.eth.eth.src_tree.eth.src.lg, layers.eth.eth.src_tree.eth.src.ig, layers.eth.eth.src_tree.eth.addr, layers.eth.eth.src_tree.eth.addr_resolved, layers.eth.eth.src_tree.eth.addr.oui, layers.eth.eth.src_tree.eth.addr.oui_resolved, layers.eth.eth.src_tree.eth.lg, layers.eth.eth.src_tree.eth.ig, layers.eth.eth.type, layers.eth.eth.stream, layers.ip.ip.version, layers.ip.ip.hdr_len, layers.ip.ip.dsfield, layers.ip.ip.dsfield_tree.ip.dsfield.dscp, layers.ip.ip.dsfield_tree.ip.dsfield.ecn, layers.ip.ip.len, layers.ip.ip.id, layers.ip.ip.flags, layers.ip.ip.flags_tree.ip.flags.rb, layers.ip.ip.flags_tree.ip.flags.df, layers.ip.ip.flags_tree.ip.flags.mf, layers.ip.ip.frag_offset, layers.ip.ip.ttl, layers.ip.ip.proto, layers.ip.ip.checksum, layers.ip.ip.checksum.status, layers.ip.ip.src, layers.ip.ip.addr, layers.ip.ip.src_host, layers.ip.ip.host, layers.ip.ip.dst, layers.ip.ip.dst_host, layers.ip.ip.stream, layers.udp.udp.srcport, layers.udp.udp.dstport, layers.udp.udp.port, layers.udp.udp.length, layers.udp.udp.checksum, layers.udp.udp.checksum.status, layers.udp.udp.stream, layers.udp.udp.stream.pnum, layers.udp.Timestamps.udp.time_relative, layers.udp.Timestamps.udp.time_delta, layers.udp.udp.payload, layers.rtps.rtps.magic, layers.rtps.rtps.version, layers.rtps.rtps.version_tree.rtps.version.major, layers.rtps.rtps.version_tree.rtps.version.minor, layers.rtps.rtps.vendorId, layers.rtps.rtps.guidPrefix.src, layers.rtps.rtps.guidPrefix.src_tree.rtps.hostId, layers.rtps.rtps.guidPrefix.src_tree.rtps.appId, layers.rtps.rtps.guidPrefix.src_tree.rtps.sm.guidPrefix.instanceId, layers.rtps.rtps.guidPrefix, layers.rtps.Default port mapping (Based on calculated domainId. Might not be accurate): domainId=0, participantIdx=0, nature=UNICAST_METATRAFFIC.rtps.domain_id, layers.rtps.Default port mapping (Based on calculated domainId. Might not be accurate): domainId=0, participantIdx=0, nature=UNICAST_METATRAFFIC.rtps.participant_idx, layers.rtps.Default port mapping (Based on calculated domainId. Might not be accurate): domainId=0, participantIdx=0, nature=UNICAST_METATRAFFIC.rtps.traffic_nature, layers.rtps.rtps.sm.id, layers.rtps.rtps.sm.id_tree.rtps.sm.flags, layers.rtps.rtps.sm.id_tree.rtps.sm.flags_tree.rtps.flag.reserved, layers.rtps.rtps.sm.id_tree.rtps.sm.flags_tree.rtps.flag.data.serialized_key, layers.rtps.rtps.sm.id_tree.rtps.sm.flags_tree.rtps.flag.data_present, layers.rtps.rtps.sm.id_tree.rtps.sm.flags_tree.rtps.flag.inline_qos, layers.rtps.rtps.sm.id_tree.rtps.sm.flags_tree.rtps.flag.endianness, layers.rtps.rtps.sm.id_tree.rtps.sm.octetsToNextHeader, layers.rtps.rtps.sm.id_tree.rtps.extra_flags, layers.rtps.rtps.sm.id_tree.rtps.octets_to_inline_qos, layers.rtps.rtps.sm.id_tree.rtps.sm.rdEntityId, layers.rtps.rtps.sm.id_tree.rtps.sm.rdEntityId_tree.rtps.sm.rdEntityId.entityKey, ...]
+Index: []
+
+[0 rows x 495 columns]
+Sat May 09 01:37:35 2023  [Info]	done
+Sat May 09 01:37:35 2023  [Info]	Saving to C:\Users\yuyux\OneDrive\Desktop\專題\Zero-Trust-Authentication-Based-on-ROS2\rospace_dataset\1_processing\merged-dataset\merged-09_05_2026@01_37_35.csv...
+Sat May 09 01:37:35 2023  [Info]	done
