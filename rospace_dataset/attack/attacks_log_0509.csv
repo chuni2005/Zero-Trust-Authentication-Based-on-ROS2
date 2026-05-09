@@ -1,0 +1,38 @@
+timestamp,attack,event
+1778298619.734056,campaign,start
+1778298619.76576,campaign,start
+1778298622.280282,campaign,end
+1778298622.280825,campaign,start
+1778298625.93284,campaign,end
+1778298625.934498,restart madness and flush output signal,sent
+1778298625.935563,campaign,start
+1778298658.803876,campaign,end
+1778298658.804614,campaign,start
+1778298774.246626,campaign,end
+1778298774.247633,restart madness and flush output signal,sent
+1778298774.248838,campaign,start
+1778298784.501857,campaign,end
+1778298784.5031,campaign,start
+1778298794.584944,campaign,end
+1778298794.587066,restart madness and flush output signal,sent
+1778298884.590067,campaign,start
+1778298915.518848,campaign,end
+1778299005.525737,campaign,start
+1778299036.528586,campaign,end
+1778299036.529799,restart madness and flush output signal,sent
+1778299126.535538,campaign,start
+1778299126.739822,campaign,end
+1778299216.74183,campaign,start
+1778299216.81155,campaign,end
+1778299216.812048,restart madness and flush output signal,sent
+1778299306.815107,campaign,start
+1778299306.944456,campaign,end
+1778299396.946959,campaign,start
+1778299397.008602,campaign,end
+1778299397.010151,restart madness and flush output signal,sent
+1778299487.012093,campaign,start
+1778299492.555583,campaign,end
+1778299582.558064,campaign,start
+1778299587.948738,campaign,end
+1778299587.949384,restart madness and flush output signal,sent
+1778299587.949649,campaign,end
