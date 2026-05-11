@@ -14,7 +14,6 @@ from concurrent.futures import Future
 from concurrent.futures import ThreadPoolExecutor
 import traceback
 
-
 parser = argparse.ArgumentParser(description="Helper script to merge csv files "
 					"from different monitor for SPaCe dataset creation")
 
@@ -43,7 +42,6 @@ parser.add_argument('-p', '--parallelize', metavar='TYPE',
 
 
 args = parser.parse_args()
-
 parallelize = True
 if args.parallelize in ['t', 'thread', 'threads']:
 	import concurrent.futures as fut
@@ -90,8 +88,11 @@ def load_and_preprocess(path, timestamp_col_name, time_unit='ms', columns=None, 
 		# content = content.assign(timestamp=pd.to_datetime(timestamp, unit=time_unit), inplace=True)
         # 轉換時間格式
 		# 1. 先統一解析成 datetime
-		temp_time = pd.to_datetime(timestamp, unit=time_unit)
-
+		try: 
+			temp_time = pd.to_datetime(timestamp, unit=time_unit)
+		except ValueError:
+            # 如果發生 ValueError (代表它是字串，且遇到嚴格的 Pandas 3.0+)
+			temp_time = pd.to_datetime(timestamp)
         # 2. 如果有時區資訊，先轉為標準 UTC 再移除時區
 		if temp_time.dt.tz is not None:
 			temp_time = temp_time.dt.tz_convert('UTC').dt.tz_localize(None)
@@ -133,8 +134,7 @@ with open('csv_manipulation.log', 'w+') as log_file:
 	def print(message='', level='Info', **kwargs):
 		now = dt.now()
 		_print(message, **kwargs)
-		log_file.write(f"{now.strftime('%a %b %d %H:%M:%S 2023')}  [{level}]\t{message}\n")
-
+		log_file.write(f"{now.strftime('%a %b %d %H:%M:%S %Y')}  [{level}]\t{message}\n")
 
 	try:
 		system_p = Path(args.system[0]).resolve()
