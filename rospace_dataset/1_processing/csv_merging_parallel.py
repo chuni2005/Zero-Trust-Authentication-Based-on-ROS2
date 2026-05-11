@@ -141,6 +141,9 @@ with open('csv_manipulation.log', 'w+') as log_file:
 		network_p = [Path(net).resolve() for net in args.network]
 		ros2_p = Path(args.ros[0]).resolve()
 		attacks_p = Path(args.attacks[0]).resolve()
+
+		dataset_id = attacks_p.stem.split('_')[-1]
+
 		net_str = '\n\t'.join(args.network)
 
 		if args.parallelize in ['p', 'proc', 'process']:
@@ -297,7 +300,7 @@ with open('csv_manipulation.log', 'w+') as log_file:
 		target_dir = working_dir / 'merged-dataset'
 		if not target_dir.exists():
 			target_dir.mkdir()
-		target = target_dir / f'merged-{dt.now().strftime("%d_%m_%Y@%H_%M_%S")}_unlabelled.csv'
+		target = target_dir / f'merged-{dataset_id}_unlabelled.csv'
 		print(f'Saving to {target}...', end='', flush=True)
 		merged.to_csv(target)
 		print('done')
@@ -346,7 +349,7 @@ with open('csv_manipulation.log', 'w+') as log_file:
 		target_dir = working_dir / 'merged-dataset'
 		if not target_dir.exists():
 			target_dir.mkdir()
-		target = target_dir / f'merged-{dt.now().strftime("%d_%m_%Y@%H_%M_%S")}.csv'
+		target = target_dir / f'merged-{dataset_id}.csv'
 		print(f'Saving to {target}...', end='', flush=True)
 		merged.to_csv(target)
 		print('done')
