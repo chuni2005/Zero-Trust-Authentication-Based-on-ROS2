@@ -18,12 +18,10 @@ import traceback
 parser = argparse.ArgumentParser(description="Helper script label the merged csv file")
 
 parser.add_argument('-s', '--source', metavar='PATH', type=str,
-                    help='the path to the csv file containing the unlabeled csv',
-                    nargs=1, required=True)
+                    help='the path to the csv file containing the unlabeled csv', required=True)
 
 parser.add_argument('-a', '--attacks', metavar='PATH', type=str,
-                    help='the path to the csv file containing attacks information (attack.py script output)',
-                    nargs=1, required=True)
+                    help='the path to the csv file containing attacks information (attack.py script output)', required=True)
 
 
 args = parser.parse_args()
@@ -53,7 +51,7 @@ def load_and_preprocess(path, timestamp_col_name, time_unit='ms', columns=None, 
         content.drop(columns=[timestamp_col_name], inplace=True)
         
         #content = content.assign(timestamp=pd.to_datetime(timestamp, unit=time_unit))
-        content = content.assign(timestamp=pd.to_datetime(timestamp, unit=time_unit), inplace=True)
+        content = content.assign(timestamp=pd.to_datetime(timestamp, unit=time_unit))
         del timestamp
         gc.collect()
         print(f'{path} converted')
@@ -64,17 +62,30 @@ def load_and_preprocess(path, timestamp_col_name, time_unit='ms', columns=None, 
         raise Exception(f"processing {path}: {str(e)}")
     return content, min_stamp, max_stamp
 
-
-attacks_p = Path("./run_13/attacks_out.csv").resolve()
+attacks_p = Path(args.attacks).resolve()
 attacks, a_min, a_max = load_and_preprocess(attacks_p, 'timestamp')
 
-skip = 1000000
+# Read the full merged file to determine its size
+print(f"Reading source file to determine size...")
+merged_full = pd.read_csv(args.source, low_memory=False)
+total_rows = len(merged_full)
+print(f"Total rows in source file: {total_rows}")
+
+skip = 0
 rows = 500000
 
-while skip <= 2140000:  
-
-    merged = pd.read_csv("./merged-dataset/run_13_unlabelled.csv", skiprows=range(1,skip), nrows=rows)
+while skip < total_rows:  
+    end_row = min(skip + rows, total_rows)
+    print(f"Processing rows {skip} to {end_row}...", end='', flush=True)
+    
+    if skip == 0:
+        merged = pd.read_csv(args.source, nrows=end_row, low_memory=False)
+    else:
+        merged = pd.read_csv(args.source, skiprows=range(1, skip+1), nrows=end_row-skip, low_memory=False)
     #merged = pd.read_csv("./merged-dataset/run_13_unlabelled.csv", usecols=cols)
+    
+    # Convert merged timestamp to datetime (timestamps are in seconds)
+    merged['timestamp'] = pd.to_datetime(merged['timestamp'], unit='s')
  
     print('Labeling attacks...', end='', flush=True)
     to_label = []
@@ -96,14 +107,14 @@ while skip <= 2140000:
         elif label == 'observe' and next_label == 'start':
             to_label.append(label)
         else:
-            print(f'unexpected entry (timestamp={row["timestamp"]} at index {index}) between {label} and {next_label} found: flagged to be removed', level='Warning')
+            print(f'unexpected entry (timestamp={row["timestamp"]} at index {index}) between {label} and {next_label} found: flagged to be removed')
             to_label.append('discard')
 
     label_values = np.array(to_label)
     del to_label
     # merged = merged.assign(attack=lambda x: (x.index == to_label).astype(int))
     # merged = merged.assign(attack=label_values)
-    merged = merged.assign(attack=label_values, inplace=True)
+    merged = merged.assign(attack=label_values)
     gc.collect()
     #print(merged['attack'])
 
@@ -123,6 +134,10 @@ while skip <= 2140000:
     print(f'Saving to {target}...', end='', flush=True)
     merged.to_csv(target)
     print('done')
+    print(f'Labeling batch completed: {len(merged)} rows saved to {target}')
 
-    skip = skip + rows
+    skip = end_row
     del merged
+
+print('\n=== Labeling process completed successfully ===')
+print(f'Total rows processed: {total_rows}')
