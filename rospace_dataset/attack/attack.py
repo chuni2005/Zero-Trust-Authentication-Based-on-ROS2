@@ -203,6 +203,8 @@ def launch(name, command, reset=False, count=None):
         start_attack(name)
         handle_network_errors(command)
         end_attack()
+        sleep(10)
+        log.write(f"{dt.now().timestamp()},{name},observe\n")
         if reset:
             send_wrapper('RESET')
     if _count > 0:
