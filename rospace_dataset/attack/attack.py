@@ -168,12 +168,12 @@ def start_attack(atk_id):
     attack_id = atk_id
     print(f"starting {attack_id}")
     # log.write(f"{dt.now().strftime('%a %b %d %H:%M:%S CEST 2026')},{attack_id},start\n")
-    log.write(f"{dt.now().timestamp()},campaign,start\n")
+    log.write(f"{dt.now().timestamp()},{attack_id},start\n")
 
 
 def end_attack():
     # log.write(f"{dt.now().strftime('%a %b %d %H:%M:%S CEST 2026')},{attack_id},end\n")
-    log.write(f"{dt.now().timestamp()},campaign,end\n")
+    log.write(f"{dt.now().timestamp()},{attack_id},end\n")
     print(f"{attack_id} ended")
 
 
