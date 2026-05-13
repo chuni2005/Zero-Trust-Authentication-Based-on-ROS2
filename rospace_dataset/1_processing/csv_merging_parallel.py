@@ -317,14 +317,25 @@ with open('csv_manipulation.log', 'w+') as log_file:
 				to_label.append(None)
 				continue
 			next_label = succ.iloc[0]['event']
+			# if label == 'start':
+			# 	to_label.append(attack)
+			# elif label == 'end' and next_label == 'observe':
+			# 	# observations between the end of an attack and the beginning of an observe period. These observations are discarded. 
+			# 	to_label.append('discard')
+			# elif label == 'observe' and next_label == 'start':
+			# 	to_label.append(label)
+			# else:
+			# 	print(f'unexpected entry (timestamp={row["timestamp"]} at index {index}) between {label} and {next_label} found: flagged to be removed', level='Warning')
+			# 	to_label.append('discard')
 			if label == 'start':
+                # 攻擊期間，正常貼上攻擊名稱 (例如 campaign)
 				to_label.append(attack)
-			elif label == 'end' and next_label == 'observe':
-				# observations between the end of an attack and the beginning of an observe period. These observations are discarded. 
-				to_label.append('discard')
-			elif label == 'observe' and next_label == 'start':
-				to_label.append(label)
+			elif label in ['end', 'sent', 'observe']:
+                # 只要目前的狀態是 end (攻擊剛結束)、sent (發送了重啟訊號)、或本來就是 observe
+                # 我們通通把它視為「和平時期」，標記為 observe
+				to_label.append('observe')
 			else:
+                # 真的出現我們預料之外的奇怪標籤，才把它丟棄
 				print(f'unexpected entry (timestamp={row["timestamp"]} at index {index}) between {label} and {next_label} found: flagged to be removed', level='Warning')
 				to_label.append('discard')
 
