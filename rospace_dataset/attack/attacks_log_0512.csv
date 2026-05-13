@@ -1,0 +1,70 @@
+timestamp,attack,event
+1778585311.089309,campaign,start
+1778585311.175667,nmap discovery,start
+1778585313.649443,nmap discovery,end
+1778585323.652015,nmap discovery,observe
+1778585323.652861,nmap discovery,start
+1778585326.061935,nmap discovery,end
+1778585336.062683,nmap discovery,observe
+1778585336.063286,nmap discovery,start
+1778585338.634152,nmap discovery,end
+1778585348.635969,nmap discovery,observe
+1778585348.638385,restart madness and flush output signal,sent
+1778585348.644057,nmap port scanning,start
+1778585478.362775,nmap port scanning,end
+1778585478.363602,nmap port scanning,start
+1778585595.494877,nmap port scanning,end
+1778585595.495878,nmap port scanning,start
+1778585710.543146,nmap port scanning,end
+1778585710.543984,restart madness and flush output signal,sent
+1778585710.544748,ros2 reconnaissance,start
+1778585720.743988,ros2 reconnaissance,end
+1778585730.74609,ros2 reconnaissance,observe
+1778585730.747421,ros2 reconnaissance,start
+1778585740.867869,ros2 reconnaissance,end
+1778585750.870389,ros2 reconnaissance,observe
+1778585750.871984,ros2 reconnaissance,start
+1778585760.971811,ros2 reconnaissance,end
+1778585770.973163,ros2 reconnaissance,observe
+1778585770.976144,restart madness and flush output signal,sent
+1778585860.985224,nmap SYN flood,start
+1778585892.532053,nmap SYN flood,end
+1778585902.534807,nmap SYN flood,observe
+1778585992.54116,nmap SYN flood,start
+1778586023.51802,nmap SYN flood,end
+1778586033.522308,nmap SYN flood,observe
+1778586123.527327,nmap SYN flood,start
+1778586154.54113,nmap SYN flood,end
+1778586164.543398,nmap SYN flood,observe
+1778586164.547033,restart madness and flush output signal,sent
+1778586254.550313,ros2 reflection,start
+1778586254.759135,ros2 reflection,end
+1778586264.761188,ros2 reflection,observe
+1778586354.766845,ros2 reflection,start
+1778586354.883996,ros2 reflection,end
+1778586364.885354,ros2 reflection,observe
+1778586454.891804,ros2 reflection,start
+1778586455.206105,ros2 reflection,end
+1778586465.208204,ros2 reflection,observe
+1778586465.210984,restart madness and flush output signal,sent
+1778586555.214186,ros2 node crashing,start
+1778586555.277886,ros2 node crashing,end
+1778586565.279398,ros2 node crashing,observe
+1778586655.28421,ros2 node crashing,start
+1778586655.571174,ros2 node crashing,end
+1778586665.57278,ros2 node crashing,observe
+1778586755.582154,ros2 node crashing,start
+1778586755.678094,ros2 node crashing,end
+1778586765.68074,ros2 node crashing,observe
+1778586765.684078,restart madness and flush output signal,sent
+1778586855.687314,metasploit SYN flood,start
+1778586860.932804,metasploit SYN flood,end
+1778586870.933789,metasploit SYN flood,observe
+1778586960.938157,metasploit SYN flood,start
+1778586966.317725,metasploit SYN flood,end
+1778586976.319285,metasploit SYN flood,observe
+1778587066.327031,metasploit SYN flood,start
+1778587071.619304,metasploit SYN flood,end
+1778587081.621204,metasploit SYN flood,observe
+1778587081.624155,restart madness and flush output signal,sent
+1778587081.625412,campaign,end
