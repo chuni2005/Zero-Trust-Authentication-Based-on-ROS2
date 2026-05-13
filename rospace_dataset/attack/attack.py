@@ -168,12 +168,12 @@ def start_attack(atk_id):
     attack_id = atk_id
     print(f"starting {attack_id}")
     # log.write(f"{dt.now().strftime('%a %b %d %H:%M:%S CEST 2026')},{attack_id},start\n")
-    log.write(f"{dt.now().timestamp()},campaign,start\n")
+    log.write(f"{dt.now().timestamp()},{attack_id},start\n")
 
 
 def end_attack():
     # log.write(f"{dt.now().strftime('%a %b %d %H:%M:%S CEST 2026')},{attack_id},end\n")
-    log.write(f"{dt.now().timestamp()},campaign,end\n")
+    log.write(f"{dt.now().timestamp()},{attack_id},end\n")
     print(f"{attack_id} ended")
 
 
@@ -203,6 +203,8 @@ def launch(name, command, reset=False, count=None):
         start_attack(name)
         handle_network_errors(command)
         end_attack()
+        sleep(10)
+        log.write(f"{dt.now().timestamp()},{name},observe\n")
         if reset:
             send_wrapper('RESET')
     if _count > 0:
