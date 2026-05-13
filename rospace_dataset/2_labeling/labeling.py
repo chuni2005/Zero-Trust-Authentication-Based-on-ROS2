@@ -32,7 +32,7 @@ def load_and_preprocess(path, timestamp_col_name, time_unit='ms', columns=None, 
             time_unit = "s"
 
         print(f"Loading '{path}'...", end='', flush=True)
-        content = pd.read_csv(path, nrows=nrows, skiprows=skiprows)
+        content = pd.read_csv(path, nrows=nrows, skiprows=skiprows, dtype={'timestamp': float})
 
         if columns is not None:
             content.columns = columns
@@ -72,7 +72,7 @@ attacks_p = Path(args.attacks).resolve()
 attacks, a_min, a_max = load_and_preprocess(attacks_p, 'timestamp')
 
 print(f"Reading source file to determine size...")
-merged_full = pd.read_csv(args.source, low_memory=False)
+merged_full = pd.read_csv(args.source, low_memory=False, dtype={'timestamp': float})
 total_rows = len(merged_full)
 print(f"Total rows in source file: {total_rows}")
 
@@ -84,10 +84,10 @@ while skip < total_rows:
     print(f"Processing rows {skip} to {end_row}...", end='', flush=True)
     
     if skip == 0:
-        merged = pd.read_csv(args.source, nrows=end_row, low_memory=False)
+        merged = pd.read_csv(args.source, nrows=end_row, low_memory=False, dtype={'timestamp': float})
     else:
-        merged = pd.read_csv(args.source, skiprows=range(1, skip+1), nrows=end_row-skip, low_memory=False)
-    
+        merged = pd.read_csv(args.source, skiprows=range(1, skip+1), nrows=end_row-skip, low_memory=False, dtype={'timestamp': float})
+
     # [修改 3] 無情斬殺所有 Unnamed 幽靈欄位
     unnamed_cols = [c for c in merged.columns if 'Unnamed' in c]
     if unnamed_cols:
@@ -125,6 +125,9 @@ while skip < total_rows:
     
     merged = merged.assign(attack=label_values)
     gc.collect()
+
+    if 'Unnamed: 0' in merged.columns:
+        merged.rename(columns={'Unnamed: 0': ''}, inplace=True)
 
     print('Removing observations outside boundaries...')
     print(merged.shape)
