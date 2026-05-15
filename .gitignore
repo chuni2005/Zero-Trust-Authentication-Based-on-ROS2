@@ -3,3 +3,7 @@
 .RData
 .Ruserdata
 .positai
+
+.idea
+GPU_data/usable_temp_bin.csv
+GPU_data/usable_temp_multi.csv
