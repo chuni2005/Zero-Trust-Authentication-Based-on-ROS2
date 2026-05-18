@@ -1,5 +1,6 @@
 # --- 設備 IP 設定 ---
-PC1_IP = "192.168.1.100"  # (Frontend & Model)
+PC1_IP = "192.168.1.100"  # Frontend
+Model_IP = "192.168.1.100"# Model
 RPI1_IP = "192.168.1.101" # Trigger ROS2
 RPI2_IP = "192.168.1.102" # 收集特徵
 VM_IP   = "192.168.1.200" # Attacker
