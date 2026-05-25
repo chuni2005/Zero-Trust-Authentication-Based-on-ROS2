@@ -1,15 +1,16 @@
 # --- 設備 IP 設定 ---
-PC1_IP = "192.168.1.100"  # Frontend
-Model_IP = "192.168.1.100"# Model
-RPI1_IP = "192.168.1.101" # Trigger ROS2
-RPI2_IP = "192.168.1.102" # 收集特徵
-VM_IP   = "192.168.1.200" # Attacker
+WEB_IP = "192.168.125.102"  # Frontend
+MODEL_IP = "192.168.125.102"# Model
+RPI1_IP = "192.168.125.100" # Trigger ROS2
+RPI2_IP = "192.168.125.101" # 收集特徵
+VM_IP   = "192.168.125.102" # Attacker
+Process_IP = "192.168.125.102"  # Process
 
 # --- 端口 (Port) 設定 ---
-WEB_PORT = 5000           # 1_pc1_main_web.py
+WEB_PORT = 5002           # 1_pc1_main_web.py
 MODEL_PORT = 5001         # 4_model_engine.py
 AGENT_PORT = 5000         # RPi1, RPi2, VM 上運行的 Flask Port
-
+Process_PORT = 5003
 # --- 攻擊腳本路徑 ---
 ATTACK_SCRIPTS_PATH = "./"
 
