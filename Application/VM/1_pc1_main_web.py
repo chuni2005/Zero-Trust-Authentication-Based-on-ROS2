@@ -9,7 +9,7 @@ RPI1_IP = config.RPI1_IP
 
 app = Flask(__name__)
 
-PORT = 5000
+PORT = config.AGENT_PORT
 
 system_status = {
     "prediction": "Waiting for data...",
@@ -45,6 +45,7 @@ def update_ui():
     data = request.json
     system_status["prediction"] = data["result"]
     return jsonify({"status": "UI updated"})
+
 @app.route('/api/get_status')
 def get_status():
     return jsonify(system_status)
