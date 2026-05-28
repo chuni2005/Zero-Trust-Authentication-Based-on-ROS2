@@ -43,7 +43,14 @@ def trigger_attack():
 @app.route('/update_web_status', methods=['POST'])
 def update_ui():
     data = request.json
-    system_status["prediction"] = data["result"]
+    result_text = data["result"]
+    system_status["prediction"] = result_text
+
+    if "normal" in result_text.lower() or "0" in result_text:
+        system_status["color"] = "#2ecc71"  # 綠色
+    else:
+        system_status["color"] = "#e74c3c"  # 紅色
+
     return jsonify({"status": "UI updated"})
 
 @app.route('/api/get_status')
