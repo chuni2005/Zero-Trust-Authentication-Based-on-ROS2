@@ -11,8 +11,8 @@ WEB_IP = config.WEB_IP
 WEB_PORT = config.WEB_PORT
 WEB_URL = f"http://{WEB_IP}:{WEB_PORT}/api/report"
 
-#MODEL_PATH = "XGBoost_model.joblib"
-MODEL_PATH = "isolation_forest_model.joblib"
+MODEL_PATH = "xgboost_model.joblib"
+#MODEL_PATH = "isolation_forest_model.joblib"
 if os.path.exists(MODEL_PATH):
     print(f"正在載入模型: {MODEL_PATH} ...")
     model = joblib.load(MODEL_PATH)
