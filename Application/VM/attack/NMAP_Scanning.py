@@ -33,7 +33,7 @@ parser.add_argument(
     "sent packets. It's required unless -n|--not-execute is passed.",
 )
 args = parser.parse_args()
-
+seconds = 5
 def kill_process(proc):
     print("\n[*] Time is over.")
     proc.terminate()
