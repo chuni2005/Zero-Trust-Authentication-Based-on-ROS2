@@ -215,13 +215,30 @@
         activeAttackLabel.innerText = selectedValue.toUpperCase();
         activeAttackLabel.style.color = '#e74c3c';
 
-        const temp_time = new Date();
-        let targetXValue = temp_time.toTimeString().split(' ')[0];
-        if (securityChart.data.labels.length > 0) {
-            targetXValue = securityChart.data.labels[securityChart.data.labels.length - 1];
+        const toSeconds = (timeStr) => {
+            const parts = timeStr.split(':');
+            const d = new Date();
+            d.setHours(parts[0], parts[1], parts[2], 0);
+            return Math.floor(d.getTime() / 1000);
+        };
+
+        let maxTicks = 10; // 預設都是 10 秒
+
+        if (selectedValue.toLowerCase() === 'ros2_recon') {
+            maxTicks = 20;
         }
 
-        const LineId = 'attack_line_' + Date.now();
+        const temp_time = new Date();
+        let targetXValue = temp_time.toTimeString().split(' ')[0];
+        const startXValue = temp_time.toTimeString().split(' ')[0];
+        const startTimestamp = Math.floor(temp_time.getTime() / 1000);
+
+        const zoneMinTarget = startTimestamp;
+        const zoneMaxTarget = startTimestamp + maxTicks;
+
+        const LineId = 'attack_line_' + temp_time;
+        const ZoneId = 'attack_zone_' + temp_time;
+
         securityChart.options.plugins.annotation.annotations[LineId] = {
             type: 'line',
             scaleID: 'x',
@@ -238,25 +255,6 @@
             }
         };
 
-        let maxTicks = 10; // 預設都是 10 秒
-
-        if (selectedValue.toLowerCase() === 'ros2_recon') {
-            maxTicks = 20;
-        }
-
-        const startXValue = temp_time.toTimeString().split(' ')[0];
-        const startTimestamp = Math.floor(temp_time.getTime() / 1000);
-
-        const zoneMinTarget = startTimestamp;
-        const zoneMaxTarget = startTimestamp + maxTicks;
-
-        const ZoneId = 'attack_zone_' + Date.now();
-        const toSeconds = (timeStr) => {
-            const parts = timeStr.split(':');
-            const d = new Date();
-            d.setHours(parts[0], parts[1], parts[2], 0);
-            return Math.floor(d.getTime() / 1000);
-        };
         securityChart.options.plugins.annotation.annotations[ZoneId] = {
 
             type: 'box',
