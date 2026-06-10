@@ -35,9 +35,12 @@ args = parser.parse_args()
 
 try:
 
-    # 利用 ROS2 的反射機制，讓目標節點回應封包
-    send(get_reflection(args.target))
-    print("\n[*] pkg have been send")
+    # 利用 ROS2 的反射機制，讓目標節點回應封包\
+    for i in range(10):
+        send(get_reflection(args.target))
+        sleep(0.1)
+        print("\n[*] pkg have been send")
+    print("\n[*] over")
 
 except KeyboardInterrupt:
     print("\n[!] 測試已被使用者中斷。")

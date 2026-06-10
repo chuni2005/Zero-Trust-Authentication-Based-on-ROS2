@@ -1,4 +1,4 @@
-if (typeof ChartAnnotation !== 'undefined') {
+    if (typeof ChartAnnotation !== 'undefined') {
         Chart.register(ChartAnnotation);
     } else {
         console.error("Failed to load Chartjs-plugin-annotation.js. Check file path alignment.");
@@ -215,13 +215,31 @@ if (typeof ChartAnnotation !== 'undefined') {
         activeAttackLabel.innerText = selectedValue.toUpperCase();
         activeAttackLabel.style.color = '#e74c3c';
 
-        let targetXValue = new Date().toTimeString().split(' ')[0];
-        if (securityChart.data.labels.length > 0) {
-            targetXValue = securityChart.data.labels[securityChart.data.labels.length - 1];
+        const toSeconds = (timeStr) => {
+            const parts = timeStr.split(':');
+            const d = new Date();
+            d.setHours(parts[0], parts[1], parts[2], 0);
+            return Math.floor(d.getTime() / 1000);
+        };
+
+        let maxTicks = 10; // 預設都是 10 秒
+
+        if (selectedValue.toLowerCase() === 'ros2_recon') {
+            maxTicks = 20;
         }
 
-        const annotationId = 'attack_line_' + Date.now();
-        securityChart.options.plugins.annotation.annotations[annotationId] = {
+        const temp_time = new Date();
+        let targetXValue = temp_time.toTimeString().split(' ')[0];
+        const startXValue = temp_time.toTimeString().split(' ')[0];
+        const startTimestamp = Math.floor(temp_time.getTime() / 1000);
+
+        const zoneMinTarget = startTimestamp;
+        const zoneMaxTarget = startTimestamp + maxTicks;
+
+        const LineId = 'attack_line_' + temp_time;
+        const ZoneId = 'attack_zone_' + temp_time;
+
+        securityChart.options.plugins.annotation.annotations[LineId] = {
             type: 'line',
             scaleID: 'x',
             value: targetXValue, 
@@ -233,6 +251,52 @@ if (typeof ChartAnnotation !== 'undefined') {
                 content: '🎯 ' + selectedValue,
                 position: 'start',
                 backgroundColor: 'rgba(231, 76, 60, 0.85)',
+                font: { size: 10, weight: 'bold' }
+            }
+        };
+
+        securityChart.options.plugins.annotation.annotations[ZoneId] = {
+
+            type: 'box',
+            // 依照你的想法實作左邊界與右邊界：
+            xMin: (ctx) => {
+                const labels = ctx.chart.data.labels;
+                if (labels.length === 0) return startXValue;
+
+                const minTimeStr = labels[0];
+
+                const minTimestamp = toSeconds(minTimeStr);
+
+                if (zoneMinTarget < minTimestamp) {
+                    return minTimeStr;
+                } else {
+                    return startXValue;
+                }
+            },
+            xMax: (ctx) => {
+                const labels = ctx.chart.data.labels;
+                if (labels.length === 0) return startXValue;
+
+                const nowTimeStr = labels[labels.length - 1];
+                const minTimeStr = labels[0];
+                const nowTimestamp = toSeconds(nowTimeStr);
+                const minTimestamp = toSeconds(minTimeStr);
+
+                if (zoneMaxTarget > nowTimestamp) {
+                    return nowTimeStr;
+                } else if (zoneMaxTarget < minTimestamp){
+                    return minTimeStr;
+                } else {
+                    const maxDate = new Date(zoneMaxTarget * 1000);
+                    return maxDate.toTimeString().split(' ')[0];
+                }
+            },
+            backgroundColor: 'rgba(231, 76, 60, 0.15)',
+            borderWidth: 0,
+            label: {
+                display: true,
+                position: 'start',
+                color: '#e74c3c',
                 font: { size: 10, weight: 'bold' }
             }
         };

@@ -24,7 +24,7 @@ def start_ros_node():
             return jsonify({
                 "status": "success",
                 "message": "ROS2 Publisher sent packet",
-                "topic": "application_topic",
+                "topic": "ouo",
                 "data": msg.data
             })
         except Exception as e:
@@ -41,7 +41,7 @@ def main():
     global node, publisher
     rclpy.init()
     node = Node('http_trigger_node')
-    publisher = node.create_publisher(String, 'application_topic', 10)
+    publisher = node.create_publisher(String, 'ouo', 10)
 
     threading.Thread(target=lambda: app.run(host="0.0.0.0", port=config.AGENT_PORT, debug=False)).start()
 
