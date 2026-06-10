@@ -44,8 +44,8 @@ class Ros2TopologyMonitor(Node):
                 continue
 
             # 過濾掉 ROS2 內部系統自身的 Topic，避免無意義監控與無窮解析
-            if 'parameter_events' in topic_name or 'rosout' in topic_name:
-                continue
+            #if 'parameter_events' in topic_name or 'rosout' in topic_name:
+            #    continue
 
             current_topics.add(topic_name)
 
