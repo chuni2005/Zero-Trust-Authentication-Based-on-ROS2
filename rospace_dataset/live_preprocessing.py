@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import os
 import warnings
+import datetime
 warnings.filterwarnings('ignore')
 
 # ==========================================
@@ -122,7 +123,7 @@ if __name__ == "__main__":
 
     # --- D. 執行前處理 ---
     print("\n⚡ 執行極速前處理 (對齊、清洗、轉型)...")
-    X_input, final_columns = preprocessor.process(df_live)
+    X_input, meta_info= preprocessor.process(df_live)
 
     # --- E. 驗證結果 (最重要的環節) ---
     print("\n📊 [驗證報告]")
@@ -144,9 +145,54 @@ if __name__ == "__main__":
         print(f"   🔴 錯誤！資料陣列中包含非數字型態 ({X_input.dtype})。")
     else:
         print("   🟢 完美！資料陣列是純數字，模型可直接讀取。")
+    print("\n🔄 執行逆向還原測試...")
+    try:
+        df_reversed = preprocessor.reverse(X_input, meta_info)
+        print("   🟢 成功執行 reverse()，回傳已正確接收。")
 
+        print("\n📊 [驗證報告 - 逆向還原結果]")
+
+        # 驗證 1：欄位數量與順序是否一致
+        if df_reversed.columns.tolist() == df_live.columns.tolist():
+            print("   🟢 完美！還原後的欄位名稱與順序與原始資料 100% 一致。")
+        else:
+            print("   🔴 錯誤！還原後的欄位結構或順序與原始資料不符。")
+
+        # 驗證 2：資料筆數是否一致
+        if len(df_reversed) == len(df_live):
+            print(f"   🟢 完美！資料筆數一致 ({len(df_reversed)} 筆)。")
+        else:
+            print(f"   🔴 錯誤！筆數不一致 (原始: {len(df_live)}，還原: {len(df_reversed)})")
+        # 驗證 3：型態是否一致
+        type_mismatches = 0
+        used_features = [col for col in preprocessor.features if col in df_live.columns]
+        for col in used_features:
+            if df_reversed[col].dtype != df_live[col].dtype:
+                # 排除因為包含 NaN 導致無法轉回 int 的特殊狀況
+                if not (df_live[col].dtype == np.int64 and df_reversed[col].dtype == np.float64):
+                    type_mismatches += 1
+                    print(f"   🟡 型態不符欄位: {col} (原始: {df_live[col].dtype} -> 還原: {df_reversed[col].dtype})")
+
+        if type_mismatches == 0:
+            print("   🟢 完美！欄位資料型態皆已還原（或處於安全的相容狀態）。")
+        else:
+            print(f"   🟡 警告！有 {type_mismatches} 個欄位的型態與原始資料不完全對齊 (通常是 NaN 引起的)。")
+    except Exception as e:
+        print(f"   🔴 錯誤！逆向還原過程中發生崩潰: {str(e)}")
     print("\n✅ 測試完成！如果上方全是綠燈，你的前處理器已經準備好上戰場了！")
     
     # (可選) 印出前兩筆處理好的資料預覽
     print("\n🔍 處理後的資料預覽 (前兩筆):")
     print(X_input[:2])
+    if df_reversed is not None:
+        print("\n💾 執行動態時間戳記存檔...")
+        output_dir = "./rev"
+        os.makedirs(output_dir, exist_ok=True)
+
+        current_time = datetime.datetime.now()
+        date_str = current_time.strftime("%m%d")
+        now_str = current_time.strftime("%H%M")
+        file_name = f"rev_{date_str}_{now_str}.csv"
+        target_path = os.path.join(output_dir, file_name)
+        df_reversed.to_csv(target_path, index=False)
+        print(f"   🟢 [儲存成功] 還原檔案已寫入 -> {target_path}")
