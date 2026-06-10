@@ -17,17 +17,75 @@ class LivePreprocessor:
             self.features.remove('attack')
             
     def process(self, raw_packet_df):
-        # 任務 1 & 2：強制對齊順序、缺少補 -1、填補空值
-        processed_df = raw_packet_df.reindex(columns=self.features, fill_value=-1)
-        processed_df = processed_df.replace([np.inf, -np.inf], -1).fillna(-1)
-        
-        # 任務 3：型態消毒 (強制轉數字)
-        processed_df = processed_df.apply(pd.to_numeric, errors='coerce').fillna(-1)
-        
-        # 任務 4：維度轉換 (轉成 2D Numpy Array)
-        model_input_array = processed_df.values 
-        
-        return model_input_array, processed_df.columns.tolist()
+        meta_info = {
+            'original_columns': raw_packet_df.columns.tolist(),
+            'original_dtypes': raw_packet_df.dtypes.to_dict(),
+            'transformations': [] # 依序記錄破壞性操作
+        }
+        #對齊欄位
+        missing_cols = [col for col in self.features if col not in raw_packet_df.columns]
+        meta_info['missing_columns_filled'] = missing_cols
+
+        current_df = raw_packet_df.reindex(columns=self.features)
+
+        numeric_check = current_df.apply(pd.to_numeric, errors='coerce')
+        #原本就是-1
+        meta_info['original_minus_one_mask'] = (numeric_check == -1).values
+        #無限大
+        meta_info['inf_mask'] = (current_df == np.inf).values
+        meta_info['neginf_mask'] = (current_df == -np.inf).values
+        #原本就是nan
+        meta_info['nan_mask'] = current_df.isna().values
+
+        numeric_df = current_df.apply(pd.to_numeric, errors='coerce')
+
+        #髒掉的string
+        meta_info['dirty_string_mask'] = numeric_df.isna().values & ~meta_info['nan_mask']
+        meta_info['dirty_string_values'] = current_df.values[meta_info['dirty_string_mask']]
+
+        final_df = numeric_df.fillna(-1)
+        model_input_array = final_df.values
+
+        return model_input_array, meta_info
+
+    def reverse(self, model_input_array, meta_info):
+        rev_df = pd.DataFrame(model_input_array, columns=self.features)
+
+        #目前是-1，但原本不是的人
+        not_originally_minus_one = (rev_df.values == -1) & ~meta_info['original_minus_one_mask']
+
+        #還原髒字串
+        string_restore_mask = not_originally_minus_one & meta_info['dirty_string_mask']
+        if string_restore_mask.any():
+            rev_df.values[string_restore_mask] = meta_info['dirty_string_values']
+
+        #還原inf
+        inf_restore_mask = not_originally_minus_one & meta_info['inf_mask']
+        rev_df.values[inf_restore_mask] = np.inf
+        neginf_restore_mask = not_originally_minus_one & meta_info['neginf_mask']
+        rev_df.values[neginf_restore_mask] = -np.inf
+
+        #還原nan
+        nan_restore_mask = not_originally_minus_one & meta_info['nan_mask']
+        rev_df = rev_df.astype(object)
+        rev_df.values[nan_restore_mask] = np.nan
+
+        #模型需要，但資料沒有的欄位 (原本就沒有，所以丟掉)
+        rev_df = rev_df.drop(columns=meta_info['missing_columns_filled'])
+        #模型不需要，但資料有的欄位 (不需要，所以設nan)
+        for col in meta_info['original_columns']:
+            if col not in rev_df.columns:
+                rev_df[col] = np.nan
+
+        #reindex
+        rev_df = rev_df.reindex(columns=meta_info['original_columns'])
+        #還原type
+        for col, dtype in meta_info['original_dtypes'].items():
+            try:
+                rev_df[col] = rev_df[col].astype(dtype)
+            except:
+                pass
+        return rev_df
 
 # ==========================================
 # 2. 測試流程啟動
