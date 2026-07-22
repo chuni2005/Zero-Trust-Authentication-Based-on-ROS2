@@ -17,7 +17,7 @@
 3. 依照 main.ipynb 流程執行 (記得修改路徑)
     - `1_processing/custom_pcapng2csv.py`: 將 `temp_capture.pcapng` 攤平成 csv 格式
     - `1_processing/csv_merging_parallel.py`: 將剛剛轉換的 csv 與 `OS_monitor.csv`、`ros2_monitor.csv` 合併並依據 `attack.log` 進行 label
-    - `2_labeling/label`: 在資料量過大，buffer不夠時，在 merge 後使用
+    - `2_labeling/label`: 在資料量過大，buffer 不夠時，在 merge 後使用
 
 4. 執行 `3_complete_dataset/complete_dataset_composition.ipynb`: 檢查數據、數據清理
 5. 執行 `4_reduced_and_noperiodicity_dataset/reduced_dataset_composition.ipynb`: 刪除不重要的欄位
@@ -29,7 +29,7 @@
 ### 4. Application
 1. 將 `/RB2/` 複製至 raspberry02
 2. 將 `/RB1/` 複製至 raspberry01
-3. 將 `/VM/` 複製至 VM
+3. 將 `/VM/` 和模型的 npy、pkl 檔案複製至 VM
 4. 在 raspberry02 利用 `setup.py` 和 `subscriber.py` 建置 ROS2 subscriber
 5. 在 raspberry02 分別執行 `os_monitor.py`、`pyshark_monitor.py`、`ros_monitor.py`
 6. 在 raspberry01 利用 `setup.py` 和 `publisher.py` 建置 ROS2 publisher
