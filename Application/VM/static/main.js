@@ -224,9 +224,9 @@
 
         let maxTicks = 10; // 預設都是 10 秒
 
-        if (selectedValue.toLowerCase() === 'ros2_recon') {
-            maxTicks = 20;
-        }
+        // if (selectedValue.toLowerCase() === 'ros2_recon') {
+        //    maxTicks = 20;
+        // }
 
         const temp_time = new Date();
         let targetXValue = temp_time.toTimeString().split(' ')[0];

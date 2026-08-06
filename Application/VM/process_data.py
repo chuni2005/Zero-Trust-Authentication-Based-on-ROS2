@@ -33,18 +33,25 @@ data_queue = queue.Queue()
 # ⏱️ 狀態記憶與 1 秒鐘滑動時間窗（Stateful Buffers）与全局对齐状态
 # =========================================================================
 packet_window = deque()
-last_known_os_state = {}
-last_known_ros_state = {}
 
 # 🛡️ 核心對齊互斥鎖與快取儲存區
 alignment_lock = threading.Lock()
-current_window_bucket = {}
-window_timer = None  # 控制 100ms 倒數計時的 Timer 物件
+
+# 💡 本地最新狀態快取（由 OS/ROS2 定時刷新，被 Pyshark 讀取）
+last_known_os_state = {}
+last_known_ros_state = {}
 
 def update_sliding_window(current_time):
     """ 清除超過 1 秒鐘的舊封包歷史紀錄 """
     while packet_window and (current_time - packet_window[0][0] > 1.0):
         packet_window.popleft()
+
+def is_convertible_to_numeric(val):
+    try:
+        float(val)
+        return True
+    except (ValueError, TypeError):
+        return False
 
 # =========================================================================
 # 🛠️ 鋼鐵維度前處理器 (LivePreprocessor)
@@ -69,6 +76,7 @@ class LivePreprocessor:
             with open('dataset_mapping_info.json', 'r', encoding='utf-8') as f:
                 self.config_dict = json.load(f)
                 self.json_path = 'dataset_mapping_info.json'
+                print(self.config_dict)
         except FileNotFoundError:
             print("❌ 找不到 dataset_mapping_info.json！請檢查檔案路徑。")
             sys.exit(1)
@@ -83,12 +91,22 @@ class LivePreprocessor:
         self.expected_dim = len(self.features)
         print(f"🎯 [模具校準完畢] 模型期待的總數為: {self.expected_dim} 維")
 
+    def ensure_json_fields(self, feature, feature_value, default_value=-1):
+        val_str = str(feature_value).strip()
+        if feature not in self.config_dict:
+            return feature_value
+
+        if val_str in self.config_dict[feature]:
+            return self.config_dict[feature][val_str]
+        else:
+            max_val = max(self.config_dict[feature].values())
+            self.config_dict[feature][val_str] = max_val + 1
+        return self.config_dict[feature][val_str]
+
     def process(self, merged_df, recent_packets, recent_syn_ratio):
-        # 複製 DataFrame 避免改動原始數據
         df = merged_df.copy()
         df.columns = [str(c).strip() for c in df.columns]
 
-        # 先處理特定的 Payload 欄位字串裁剪（保留你原本的邏輯）
         for col in self.payload_cols:
             if col in df.columns:
                 raw_val = df[col].iloc[0]
@@ -98,64 +116,28 @@ class LivePreprocessor:
                     val_str = str(raw_val).strip()
                     df[col] = f"{val_str[:11]}_{len(val_str)}"
 
-        # -------------------------------------------------------------
-        # 🛠️ 核心前處理改造：int 優先 -> 轉 int 優先 -> Dict 查表 -> 殘留 -1
-        # -------------------------------------------------------------
         for col in df.columns:
-            if col in ['recent_packets_in_1s', 'recent_syn_ratio_in_1s', 'forward_packets']:
+            if col in ['recent_packets_in_1s', 'recent_syn_ratio_in_1s']:
                 continue
                 
             raw_val = df[col].iloc[0]
 
-            # 優先過濾掉 pandas 產生的缺失值 (NaN) 或空字串
-            if pd.isna(raw_val) or str(raw_val).strip() in ['', 'nan', 'NaN']:
-                df[col] = -1
-                continue
-
-            # 🛠️ 1. 如果資料本身就是 int 或是 NumPy 的整數
-            if isinstance(raw_val, (int, np.integer)):
-                df[col] = int(raw_val)
-                continue
-
-            # 🛠️ 2. 嘗試硬轉成 int（能轉的就轉 int，包含數字字串、浮點數）
-            try:
-                # 透過 float 再轉 int 確保能完美消化像 "64.0" 這類的數值字串
-                df[col] = int(float(raw_val))
-                continue
-            except (ValueError, TypeError):
-                # 如果報錯代表包含字母、冒號（如 Hex 碼或 Payload），無法直接轉 int
-                pass
-
-            # 🛠️ 3. 不能直接轉 int 的，比照 Dict 字典進行查表對應
             val_str = str(raw_val).strip()
-            if col in self.config_dict and val_str in self.config_dict[col]:
-                try:
-                    df[col] = int(self.config_dict[col][val_str])
-                except (ValueError, TypeError):
-                    df[col] = self.config_dict[col][val_str]  # 若字典對應值為文字則依字典原樣填入
-            else:
-                # 🛠️ 4. 字典裡也沒有對應關係的，通通填入 -1
-                df[col] = -1
 
-        # -------------------------------------------------------------
-        # 🛠️ 填入即時統計特徵
-        # -------------------------------------------------------------
+            df[col] = self.ensure_json_fields(col, val_str)
+            df[col] = pd.to_numeric(df[col], errors='coerce')
+            
+            # 把 NaN 補成 -1
+            df[col] = df[col].fillna(-1)
+            
         if 'recent_packets_in_1s' in self.features: df['recent_packets_in_1s'] = int(recent_packets)
         if 'recent_syn_ratio_in_1s' in self.features: df['recent_syn_ratio_in_1s'] = float(recent_syn_ratio)
 
-        # -------------------------------------------------------------
-        # 🛠️ 重新索引與最終結構校準
-        # -------------------------------------------------------------
-        # 依照訓練模具強制對齊順序
         processed_df = df.reindex(columns=self.features)
-        
-        # 處理極端無限大值，並將所有未捕獲到的殘留空欄位統一填補為 -1
         processed_df = processed_df.replace([np.inf, -np.inf], np.nan)
         processed_df = processed_df.fillna(-1)
         
-        # 轉換為 XGBoost 期待的 2D NumPy Array
         model_input_array = processed_df.values 
-        
         return model_input_array, "READY"
 
 preprocessor = LivePreprocessor(SAVED_FEATURES_PATH)
@@ -167,7 +149,7 @@ preprocessor = LivePreprocessor(SAVED_FEATURES_PATH)
 def send_to_model_engine(features_matrix):
     try:
         if features_matrix.shape != (1, preprocessor.expected_dim):
-            print(f"❌ [傳传输攔截] 維度 {features_matrix.shape} 錯誤，非預期 (1, {preprocessor.expected_dim})！已拋棄。")
+            print(f"❌ [傳輸攔截] 維度 {features_matrix.shape} 錯誤，非預期 (1, {preprocessor.expected_dim})！已拋棄。")
             return
 
         payload = {"features": features_matrix.tolist()}
@@ -192,116 +174,91 @@ def send_to_model_engine(features_matrix):
 
 
 # =========================================================================
-# ⏱️ 100ms 剛性時間窗到期：強制打包發送與清洗器
-# =========================================================================
-def flush_window_callback():
-    """ 這是當 100ms 倒數計時結束時，自動觸發的發送核心 """
-    global current_window_bucket, window_timer, last_known_os_state, last_known_ros_state
-    
-    with alignment_lock:
-        pyshark_payloads = current_window_bucket.get("pyshark_monitor", [])
-        
-        # 🛡️ 鋼鐵防線一：如果 100ms 到了，快取裡面「根本沒有網路資訊」
-        if not pyshark_payloads:
-            print("🗑️ [100ms 檢查] 判定真空：此輪完全沒有網路資訊，直接物理刪除，拒絕發送！")
-            current_window_bucket.clear()
-            window_timer = None
-            return 
-            
-        # 🛡️ 鋼鐵防線二：過濾掉全被填成 -1 且沒有真實流量的偽網路封包
-        if len(pyshark_payloads) == 1 and pyshark_payloads[0].get("layers.ip.ip.proto", -1) == -1:
-            print("🗑️ [100ms 檢查] 判定偽包：網路特徵皆為 -1.0，直接物理刪除，拒絕發送！")
-            current_window_bucket.clear()
-            window_timer = None
-            return
-
-        os_payloads = current_window_bucket.get("os_monitor", [])
-        ros_payloads = current_window_bucket.get("ros_monitor", [])
-        
-        # [ 1. 更新 OS 快取狀態 ]
-        if os_payloads:
-            for k, v in os_payloads[0].items():
-                if v != -1: last_known_os_state[k] = v
-
-        # [ 2. 更新 ROS2 快取狀態 ]
-        if ros_payloads:
-            for k, v in ros_payloads[0].items():
-                if k == 'publishers_count':
-                    last_known_ros_state['publisher_count'] = v
-                elif v != -1:
-                    last_known_ros_state[k] = v
-
-        # [ 3. 計算 1 秒鐘網路滑動視窗 ]
-        current_time = time.time()
-        for pkt in pyshark_payloads:
-            is_tcp = 1 if pkt.get("layers.ip.ip.proto") in [6, '6'] else 0
-            tcp_flags = str(pkt.get("layers.tcp.tcp.flags", "0")).strip()
-            is_syn = 1 if is_tcp and tcp_flags in ["0x0002", "0x02", "2", 2] else 0
-            packet_window.append((current_time, is_syn, is_tcp))
-        
-        update_sliding_window(current_time)
-        
-        recent_packets_in_1s = len(packet_window)
-        total_tcp_1s = sum(1 for x in packet_window if x[2] == 1)
-        total_syn_1s = sum(1 for x in packet_window if x[1] == 1)
-        recent_syn_ratio_in_1s = (total_syn_1s / total_tcp_1s) if total_tcp_1s > 0 else 0.0
-
-        # [ 4. 組裝特徵列 ]
-        flattened_data = {}
-        flattened_data.update(last_known_os_state)  
-        flattened_data.update(last_known_ros_state) 
-        flattened_data.update(pyshark_payloads[0])   
-
-        if 'forward_packets' in preprocessor.features:
-            flattened_data['forward_packets'] = int(recent_packets_in_1s)
-
-        # [ 5. 前處理並寄送模型 ]
-        df_live = pd.DataFrame([flattened_data])
-        X_input, status = preprocessor.process(df_live, recent_packets_in_1s, recent_syn_ratio_in_1s)
-        
-        if X_input is not None and status == "READY":
-            print(f"⏱️ [100ms 視窗到期] ✅ 驗證通過！網路驅動強制送出！(OS={len(os_payloads)>0}, ROS2={len(ros_payloads)>0})")
-            executor.submit(send_to_model_engine, X_input)
-
-        # 🔄 清空狀態，迎接下一輪
-        current_window_bucket.clear()
-        window_timer = None
-
-
-# =========================================================================
-# 🎛️ 新版非同步事件驅動型 Consumer Worker
+# 🎛️ 事件驅動型 Consumer Worker（核心邏輯改造）
 # =========================================================================
 def alignment_consumer_worker():
-    global current_window_bucket, window_timer
-    print("⏳ [Alignment Worker] 網路事件主驅動 & 100ms 剛性限時對齊管線啟動...")
+    global last_known_os_state, last_known_ros_state
+    print("⚡ [Alignment Worker] 網路事件即時驅動管線啟動...")
     
     while True:
         try:
             try:
-                data_packet = data_queue.get(timeout=0.01)
+                # 提高吞吐響應，降低 timeout
+                data_packet = data_queue.get(timeout=0.005)
             except queue.Empty:
                 continue
 
             source = data_packet.get("data_source")
-            raw_payload_list = data_packet.get("payload_list", [])
+            raw_payload_list = data_packet.get("payload_list")
 
             if not raw_payload_list:
                 data_queue.task_done()
                 continue
             
             with alignment_lock:
-                if source == "pyshark_monitor":
-                    current_window_bucket[source] = raw_payload_list
+                # ---------------------------------------------------------
+                # 情況 A：收到 OS 或 ROS2 資訊 -> 立即更新本地快取，不觸發發送
+                # ---------------------------------------------------------
+                if source == "os_monitor":
+                    if raw_payload_list and isinstance(raw_payload_list[0], dict):
+                        for k, v in raw_payload_list[0].items():
+                            if v != -1: 
+                                last_known_os_state[k] = v
+                    data_queue.task_done()
+                    continue
+
+                elif source == "ros_monitor":
+                    if raw_payload_list and isinstance(raw_payload_list[0], dict):
+                        for k, v in raw_payload_list[0].items():
+                            if k == 'publisher_count':
+                                last_known_ros_state['publisher_count'] = v
+                            elif v != -1:
+                                last_known_ros_state[k] = v
+                    data_queue.task_done()
+                    continue
+
+                # ---------------------------------------------------------
+                # 情況 B：收到 Pyshark 網路資訊 -> 【核心觸發發動機】
+                # ---------------------------------------------------------
+                elif source == "pyshark_monitor":
+                    pyshark_payloads = raw_payload_list
                     
-                    if window_timer is None:
-                        window_timer = threading.Timer(0.100, flush_window_callback)
-                        window_timer.start()
-                        
-                elif source in ["os_monitor", "ros_monitor"]:
-                    if window_timer is not None:
-                        current_window_bucket[source] = raw_payload_list
-                    else:
-                        pass
+                    # 🛡️ 鋼鐵防線：過濾偽包
+                    if len(pyshark_payloads) == 1 and pyshark_payloads[0].get("layers.ip.ip.proto", -1) == -1:
+                        data_queue.task_done()
+                        continue
+
+                    # 1. 計算 1 秒鐘網路滑動視窗統計特徵
+                    current_time = time.time()
+                    for pkt in pyshark_payloads:
+                        is_tcp = 1 if pkt.get("layers.ip.ip.proto") in [6, '6'] else 0
+                        tcp_flags = str(pkt.get("layers.tcp.tcp.flags", "0")).strip()
+                        is_syn = 1 if is_tcp and tcp_flags in ["0x0002", "0x02", "2", 2] else 0
+                        packet_window.append((current_time, is_syn, is_tcp))
+                    
+                    update_sliding_window(current_time)
+                    
+                    recent_packets_in_1s = len(packet_window)
+                    total_tcp_1s = sum(1 for x in packet_window if x[2] == 1)
+                    total_syn_1s = sum(1 for x in packet_window if x[1] == 1)
+                    recent_syn_ratio_in_1s = (total_syn_1s / total_tcp_1s) if total_tcp_1s > 0 else 0.0
+
+                    # 2. 物理打包：融合本地最新的 OS、ROS 狀態以及剛抵達的 Pyshark 數據
+                    flattened_data = {}
+                    flattened_data.update(last_known_os_state)   # 載入當前本地最新 OS 欄位
+                    flattened_data.update(last_known_ros_state)  # 載入當前本地最新 ROS2 欄位
+                    flattened_data.update(pyshark_payloads[0])    # 載入當前觸發的 Pyshark 欄位
+
+                    if 'forward_packets' in preprocessor.features:
+                        flattened_data['forward_packets'] = int(recent_packets_in_1s)
+
+                    # 3. 前處理與非同步派發模型端
+                    df_live = pd.DataFrame([flattened_data])
+                    X_input, status = preprocessor.process(df_live, recent_packets_in_1s, recent_syn_ratio_in_1s)
+                    
+                    if X_input is not None and status == "READY":
+                        print(f"⚡ [Pyshark 驅動] 即時打包送出！(快取狀態: OS_cols={len(last_known_os_state)}, ROS2_cols={len(last_known_ros_state)})")
+                        executor.submit(send_to_model_engine, X_input)
 
             data_queue.task_done()
         except Exception as e:
@@ -334,18 +291,19 @@ def receive_raw_data():
         else:
             topo_field = raw_data.get("topology", [])
             actual_payload_list = topo_field if isinstance(topo_field, list) else [topo_field]
-
+            
         data_queue.put({
             "data_source": source,
             "arrival_ts": time.time(),
             "payload_list": actual_payload_list
         })
+
         return jsonify({"status": "success"}), 200
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 
 
 if __name__ == "__main__":
-    print(f"🚀 [6號-Preprocess] 網路事件驅動自適應對齊核心啟動...")
+    print(f"🚀 [6號-Preprocess] Pyshark 事件驅動即時對齊核心啟動...")
     print(f"📡 監聽埠口: 0.0.0.0:{PROCESS_PORT} ...")
     app.run(host="0.0.0.0", port=PROCESS_PORT, debug=False, threaded=True)

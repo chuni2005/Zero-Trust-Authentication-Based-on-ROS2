@@ -1,10 +1,10 @@
 # --- 設備 IP 設定 ---
-WEB_IP = "192.168.125.102"  # Frontend
-MODEL_IP = "192.168.125.102"# Model
+WEB_IP = "127.0.0.1"  # Frontend
+MODEL_IP = "127.0.0.1"# Model
 RPI1_IP = "192.168.125.100" # Trigger ROS2
 RPI2_IP = "192.168.125.101" # 收集特徵
-VM_IP   = "192.168.125.102" # Attacker
-Process_IP = "192.168.125.102"
+VM_IP   = "192.168.125.104" # Attacker
+Process_IP = "192.168.125.104"
 
 # --- 端口 (Port) 設定 ---
 WEB_PORT = 5002           # 1_pc1_main_web.py
