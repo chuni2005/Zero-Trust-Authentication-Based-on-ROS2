@@ -78,20 +78,21 @@ raspberry01 作為 ros2 publisher 發送訊息至 raspberrry01，raspberry02 作
 執行 `./Model Training/rospace_dataset/5_usage_notes/usage_note_A_detection_shuffled.ipynb`: 訓練模型並輸出 npy 和 pkl 檔案
 
 ## 4. Application
+> **請一定要先將 `./Application/config.txt` 設定好，各個節點都需要。**
 
 ### raspberry01
-> 按照[建構 ros2 環境](#安裝環境-ros2-指南)的步驟執行，第七點將以 `./Application/ras01/ros2` 內的檔案替換。
+> 按照[建構 ros2 環境](#安裝環境-ros2-指南)的步驟執行，第七點將以 `./Application/ras01/ros2` 內的檔案替換，**並將 `./Application/config.py` 放入與 `./Application/ras01/ros2/publisher.py 同層的地方`**。
 
 1. 按照[建構 ros2 環境](#安裝環境-ros2-指南)執行：`ros2 run Application publisher` 以啟動
 
 ### raspberry02
-> 按照[建構 ros2 環境](#安裝環境-ros2-指南)的步驟執行，第七點將以 `./Application/ras02/ros2` 內的檔案替換，並將 `./Application/ras02/app_tmux.sh` 和 `./Application/ras02/.*monitor.py` 放於同樣的相對路徑下。
+> 按照[建構 ros2 環境](#安裝環境-ros2-指南)的步驟執行，第七點將以 `./Application/ras02/ros2` 內的檔案替換，並將 `./Application/ras02/app_tmux.sh`、`./Application/ras02/.*monitor.py` 和 **`./Application/config.py`** 放於同樣的相對路徑下。
 
 1. 直接執行：`./Application/ras02/app_tmux.sh` 以啟動 monitors 和 subscriber
 2. tmux 操作請見[也許你會用到的 tmux 快捷鍵](#也許你會用到的-tmux-快捷鍵)
 
 ### virtual machine
-> 加入 `./Application/vm/` 的所有檔案。
+> 加入 `./Application/vm/` 的所有檔案，**並將`./Application/config.py` 放於同樣的相對路徑下**。
 
 1. 啟動 msf 後台：`msfrpcd -P pentest -n -f`
 2. 在 VM 分別執行：
